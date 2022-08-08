@@ -1,0 +1,47 @@
+---
+title: "Toolik Lake Clorophyll"
+author: "Victoria Cutler"
+format: html
+editor: visual
+execute:
+  echo: true
+  warning: false
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+library(skimr)
+```
+
+## Read in data
+
+```{r}
+toolik_chlorophyll <- read_csv(here::here("data", 
+                                          "data-raw",
+                                          "toolik_chlorophyll.csv"),
+                               na = c(".")) %>% 
+  clean_names()
+```
+
+```{r}
+skim(toolik_chlorophyll)
+```
+
+```{r}
+chlorophyll_pprod_graph <- ggplot(data = toolik_chlorophyll, 
+                                  aes(x = active_chl_a_ug_l, 
+                                      y = pprod_mg_available_c_m3_d)) +
+  geom_point()
+
+chlorophyll_pprod_graph
+```
+
+```{r}
+ggsave(plot = chlorophyll_pprod_graph, 
+       here::here("figs", "my_awesome_graph.jpg"),
+       width = 8,
+       height = 8,
+       dpi = 200)
+```
